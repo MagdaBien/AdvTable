@@ -15,6 +15,7 @@ const authMiddleware = async (req, res, next) => {
       req.session.user = {
         id: sessionData.user.id,
         login: sessionData.user.login,
+        avatar: sessionData.user.avatar,
       };
 
       next();

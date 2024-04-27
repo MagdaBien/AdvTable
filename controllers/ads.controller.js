@@ -1,5 +1,6 @@
 const Ad = require("../models/ad.model");
 const getImageFileType = require("../utils/getImageFileType");
+const uploadFolderPath = require("../utils/uploadFolderPath");
 
 const fs = require("fs");
 const { promisify } = require("util");
@@ -15,7 +16,7 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
   try {
-    const ad = await Ad.findById(req.params.id);
+    const ad = await Ad.findById(req.params.id).populate("user");
     if (!ad) res.status(404).json({ message: "Not found" });
     else res.json(ad);
   } catch (err) {
@@ -28,6 +29,7 @@ exports.addOne = async (req, res) => {
   const fileType = req.file ? await getImageFileType(req.file) : "unknown";
   try {
     if (
+      req.session.user &&
       title &&
       title.length <= 50 &&
       typeof title === "string" &&
@@ -53,7 +55,7 @@ exports.addOne = async (req, res) => {
         location,
         user,
       });
-      console.log("newAd ", newAd);
+      //console.log("newAd ", newAd);
       await newAd.save();
       res.json({ message: "OK" });
     } else {
@@ -69,11 +71,14 @@ exports.addOne = async (req, res) => {
 
 exports.updateOne = async (req, res) => {
   const { title, adContent, price, location } = req.body;
-  //console.log(title, adContent, price, location, req.file);
+  console.log(title, adContent, price, location, req.file);
 
   try {
-    const newAd = await Ad.findOne({ _id: req.params.id });
-    if (newAd) {
+    const adToUpdate = await Ad.findOne({ _id: req.params.id });
+    if (req.session.user.id !== adToUpdate.user) {
+      return res.status(404).json({ message: "Not your ad..." });
+    }
+    if (adToUpdate) {
       if (
         title &&
         title.length <= 50 &&
@@ -82,25 +87,25 @@ exports.updateOne = async (req, res) => {
         adContent.length <= 1000 &&
         typeof adContent === "string" &&
         price &&
-        typeof price === "string" &&
         location &&
         typeof location === "string"
       ) {
-        newAd.title = title;
-        newAd.adContent = adContent;
-        newAd.price = price;
-        newAd.location = location;
+        adToUpdate.title = title;
+        adToUpdate.adContent = adContent;
+        adToUpdate.price = price;
+        adToUpdate.location = location;
         if (req.file) {
           const fileType = await getImageFileType(req.file);
           if (["image/png", "image/jpeg", "image/gif"].includes(fileType)) {
-            const filePath = req.file.path.split(req.file.filename);
-            const oldFile = filePath[0] + newAd.adPhoto;
-            await unlinkAsync(oldFile);
-            newAd.adPhoto = req.file.filename;
+            const oldPhotoToDelete =
+              uploadFolderPath + "/" + adToUpdate.adPhoto;
+            console.log("oldFile ", oldPhotoToDelete);
+            await unlinkAsync(oldPhotoToDelete);
+            adToUpdate.adPhoto = req.file.filename;
           }
         }
-        await newAd.save();
-        res.json(newAd);
+        await adToUpdate.save();
+        res.json(adToUpdate);
       } else {
         return res.status(409).json({ message: "data incorrect..." });
       }
@@ -113,7 +118,12 @@ exports.updateOne = async (req, res) => {
 exports.deleteOne = async (req, res) => {
   try {
     const ad = await Ad.findOneAndDelete({ _id: req.params.id });
+    if (req.session.user.id !== ad.user) {
+      return res.status(404).json({ message: "Not your ad..." });
+    }
     if (ad) {
+      const photoToDelete = uploadFolderPath + "/" + ad.adPhoto;
+      await unlinkAsync(photoToDelete);
       res.json(ad);
     } else res.status(404).json({ message: "Not found..." });
   } catch (err) {

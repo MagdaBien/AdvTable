@@ -7,7 +7,12 @@ const AdController = require("../controllers/ads.controller");
 
 router.get("/ads", AdController.getAll);
 router.get("/ads/:id", AdController.getById);
-router.post("/ads", imageUpload.single("adPhoto"), AdController.addOne);
+router.post(
+  "/ads",
+  authMiddleware,
+  imageUpload.single("adPhoto"),
+  AdController.addOne
+);
 router.put(
   "/ads/:id",
   authMiddleware,

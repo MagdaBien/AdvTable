@@ -1,13 +1,14 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const getImageFileType = require("../utils/getImageFileType");
+const Session = require("../models/Session.model");
 
 const fs = require("fs");
 const { promisify } = require("util");
 const unlinkAsync = promisify(fs.unlink);
 
 exports.registerUser = async (req, res) => {
-  const { login, password, avatar, tel } = req.body;
+  const { login, password, tel } = req.body;
   const fileType = req.file ? await getImageFileType(req.file) : "unknown";
 
   try {
@@ -86,18 +87,13 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-exports.getUser = async (req, res) => {
-  res.send(req.session.user);
-};
-
-exports.removeUser = async (req, res) => {
-  // req.logout();
+exports.logOutUser = async (req, res) => {
+  if (process.env.NODE_ENV !== "production") await Session.deleteMany({});
   req.session.destroy(function (err) {
     if (err) {
       console.log("error: ", err);
       return next(err);
     }
-    res.redirect("/");
+    res.json({ message: "User logout..." });
   });
-  if (process.env.NODE_ENV !== "production") await Session.deleteMany({});
 };
