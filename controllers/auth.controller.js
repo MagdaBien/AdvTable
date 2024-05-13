@@ -9,6 +9,7 @@ const unlinkAsync = promisify(fs.unlink);
 
 exports.registerUser = async (req, res) => {
   const { login, password, tel } = req.body;
+  //console.log("dane do rejestracji: ", login, password, tel);
   const fileType = req.file ? await getImageFileType(req.file) : "unknown";
 
   try {
@@ -35,12 +36,12 @@ exports.registerUser = async (req, res) => {
         tel,
       });
       await newUser.save();
-      res.json({ message: "User created: " + newUser.login });
+      res.status(201).json({ message: "User created: " + newUser.login });
     } else {
       if (req.file.path) {
         await unlinkAsync(req.file.path);
       }
-      return res.status(409).json({ message: "data incorrect..." });
+      return res.status(400).json({ message: "data incorrect..." });
     }
   } catch (err) {
     res.status(500).json({ message: err });
@@ -49,7 +50,7 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   const { login, password } = req.body;
-  console.log("user: ", login, password);
+  //console.log("dane do logowania: ", login, password, req.body);
   try {
     if (
       login &&
@@ -70,7 +71,7 @@ exports.loginUser = async (req, res) => {
             id: user.id,
             avatar: user.avatar,
           };
-          return res.status(409).json(req.session.user);
+          return res.status(200).json(req.session.user);
         } else {
           return res
             .status(400)
@@ -94,6 +95,6 @@ exports.logOutUser = async (req, res) => {
       console.log("error: ", err);
       return next(err);
     }
-    res.json({ message: "User logout..." });
+    res.status(200).json({ message: "User logout..." });
   });
 };

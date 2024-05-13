@@ -42,7 +42,7 @@ const usersRoutes = require("./routes/users.routes");
 const authRoutes = require("./routes/auth.routes");
 app.use("/api", adsRoutes);
 app.use("/api", usersRoutes);
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("*", (req, res) => {
   res.send("Server is running...");
