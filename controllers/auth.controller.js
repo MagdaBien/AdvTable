@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const getImageFileType = require("../utils/getImageFileType");
-const Session = require("../models/Session.model");
+const Session = require("../models/session.model");
 
 const fs = require("fs");
 const { promisify } = require("util");
