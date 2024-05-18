@@ -1,11 +1,17 @@
 const mongoose = require("mongoose");
 
 const connectToDB = () => {
-  // connect to DB
-  mongoose.connect("mongodb://127.0.0.1:27017/adsDB", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  const NODE_ENV = process.env.NODE_ENV;
+  let dbUri = "";
+
+  if (NODE_ENV === "production") {
+    dbUri =
+      "mongodb+srv://magbie1978:${process.env.DB_PASS}@cluster0.ut7tgmr.mongodb.net/adsDB?retryWrites=true&w=majority&appName=Cluster0";
+  } else {
+    dbUri = "mongodb://localhost:27017/adsDB";
+  }
+
+  mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
   const db = mongoose.connection;
 
   // on success

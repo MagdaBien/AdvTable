@@ -38,7 +38,7 @@ app.use(
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "/client/build")));
 
-// add photo routes
+// add  routes
 const adsRoutes = require("./routes/ads.routes");
 const usersRoutes = require("./routes/users.routes");
 const authRoutes = require("./routes/auth.routes");
@@ -47,7 +47,7 @@ app.use("/api", usersRoutes);
 app.use("/api/auth", authRoutes);
 
 app.get("*", (req, res) => {
-  res.send("Server is running...");
+  res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
 
 app.use((req, res) => {
