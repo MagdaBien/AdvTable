@@ -1,4 +1,5 @@
 const Session = require("../models/Session.model");
+
 const authMiddleware = async (req, res, next) => {
   if (process.env.NODE_ENV !== "production") {
     try {
@@ -13,7 +14,7 @@ const authMiddleware = async (req, res, next) => {
       // if session is found, parse it and set user in req.session
       const sessionData = JSON.parse(sessionRecord.session);
       req.session.user = {
-        id: sessionData.user.id,
+        id: sessionData.user._id,
         login: sessionData.user.login,
         avatar: sessionData.user.avatar,
       };
