@@ -6,6 +6,7 @@ const connectToDB = require("./db");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
+const helmet = require("helmet");
 
 // start express server
 const app = express();
@@ -19,6 +20,7 @@ connectToDB();
 // add middleware
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
