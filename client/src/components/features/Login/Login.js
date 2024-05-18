@@ -4,11 +4,13 @@ import { useState } from "react";
 import { API_URL } from "../../../config";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../../redux/usersRedux";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState(null); // null, loading, success, serverError, clientError
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const actionHandler = (e) => {
@@ -22,10 +24,14 @@ const Login = () => {
 
     setStatus("loading");
     fetch(`${API_URL}/auth/login`, options)
-      .then((res) => {
+      .then(async (res) => {
         if (res.status === 200) {
+          const user = await res.json();
           setStatus("success");
-          dispatch(logIn({ login }));
+          dispatch(logIn(user));
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         } else if (res.status === 400) {
           setStatus("clientError");
         } else {

@@ -4,23 +4,30 @@ import AdForm from "../AdForm/AdForm";
 import { useSelector } from "react-redux";
 import { getUser } from "../../../redux/usersRedux";
 import { addAdRequest } from "../../../redux/adsRedux";
+import shortid from "shortid";
 
 const AddAdForm = () => {
-  const user = useSelector(getUser);
+  const loggedUser = useSelector(getUser);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const form = {};
+  const adData = {
+    _id: shortid(),
+    title: "",
+    adContent: "",
+    adPhoto: "",
+    price: "",
+    published: "",
+    location: "",
+  };
 
   const handleSubmit = (form) => {
-    console.log("przed dispatch: ", {
-      ...form,
-      user: "6640b533bc7a0a3bd4b76c83",
-    });
     dispatch(
       addAdRequest({
         ...form,
-        user: "6640b533bc7a0a3bd4b76c83",
+        user: loggedUser.id,
+        _id: adData._id,
       })
     );
     navigate("/");
@@ -30,7 +37,7 @@ const AddAdForm = () => {
     <AdForm
       actionHandle={handleSubmit}
       buttonName="ADD AD"
-      formState={form}
+      formData={adData}
     ></AdForm>
   );
 };

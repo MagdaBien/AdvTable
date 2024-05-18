@@ -4,23 +4,34 @@ import Col from "react-bootstrap/Col";
 import { NavLink } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import ListGroup from "react-bootstrap/ListGroup";
+import { IMGS_URL } from "../../../config";
+import Button from "react-bootstrap/Button";
 
 const AdItem = (props) => {
+  //const formatedPublishData = props.published.substring(0, 10);
+
   return (
     <ListGroup.Item>
       <Row>
-        <Col>
-          <p>Ad number: {props._id}</p>
-          <p>{props.title}</p>
-          <p>{props.location}</p>
+        <Col xs="auto">
+          <div className={styles.photo}>
+            <img className={styles.photo} src={IMGS_URL + props.adPhoto} />
+          </div>
         </Col>
-        <Col>foto</Col>
         <Col>
-          <Nav.Link as={NavLink} to={"/ad/edit/" + props._id}>
-            <span className={styles.bold}>EDIT </span>
-          </Nav.Link>
-          <Nav.Link as={NavLink} to={"/ad/" + props._id}>
-            <span className={styles.bold}>READ MORE</span>
+          <h3 className={styles.title}>{props.title}</h3>
+          <h4> {props.price} zł</h4>
+          <p>Location: {props.location}</p>
+        </Col>
+        <Col xs="auto">
+          <Nav.Link
+            as={NavLink}
+            to={"/ad/" + props._id}
+            className={styles.moreButton}
+          >
+            <Button variant="primary" className="mt-3">
+              READ MORE
+            </Button>
           </Nav.Link>
         </Col>
       </Row>

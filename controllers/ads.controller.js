@@ -27,7 +27,7 @@ exports.getById = async (req, res) => {
 exports.addOne = async (req, res) => {
   const { title, adContent, published, price, location, user } = req.body;
   const fileType = req.file ? await getImageFileType(req.file) : "unknown";
-  console.log(
+  /*console.log(
     "dane do dodania: ",
     title,
     adContent,
@@ -35,7 +35,7 @@ exports.addOne = async (req, res) => {
     price,
     location,
     user
-  );
+  );*/
   try {
     if (
       req.session.user &&
@@ -125,6 +125,7 @@ exports.updateOne = async (req, res) => {
 };
 
 exports.deleteOne = async (req, res) => {
+  console.log("kasuje ad o id: ", req.params.id);
   try {
     const ad = await Ad.findOneAndDelete({ _id: req.params.id });
     if (req.session.user.id !== ad.user) {
@@ -143,6 +144,7 @@ exports.deleteOne = async (req, res) => {
 exports.searchPhrase = async (req, res) => {
   try {
     const searchPhrase = req.params.searchPhrase;
+    //console.log("searchPhrase: ", searchPhrase);
     const foundAds = await Ad.find({
       $or: [
         {
@@ -154,7 +156,7 @@ exports.searchPhrase = async (req, res) => {
       ],
     }).populate("user");
     if (foundAds.length > 0) {
-      res.json(foundAds);
+      res.status(200).json(foundAds);
     } else res.json({ message: "Phrase not found..." });
   } catch (err) {
     res.status(500).json({ message: err });

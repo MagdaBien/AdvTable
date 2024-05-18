@@ -2,6 +2,7 @@ import { Alert, AlertHeading, Button, Spinner } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
 import { API_URL } from "../../../config";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [login, setLogin] = useState("");
@@ -9,10 +10,11 @@ const Register = () => {
   const [tel, setTel] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [status, setStatus] = useState(null); // null, loading, success, serverError, clientError, loginError
+  const navigate = useNavigate();
 
   const actionHandler = (e) => {
     e.preventDefault();
-    console.log(login, password, tel, avatar);
+    //console.log(login, password, tel, avatar);
 
     const fd = new FormData();
     fd.append("login", login);
@@ -30,6 +32,9 @@ const Register = () => {
       .then((res) => {
         if (res.status === 201) {
           setStatus("success");
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         } else if (res.status === 400) {
           setStatus("clientError");
         } else if (res.status === 409) {
@@ -49,10 +54,14 @@ const Register = () => {
         <h1>Register now</h1>
 
         {status === "success" && (
-          <Alert variant="success">
-            <AlertHeading>Succes!</AlertHeading>
-            <p>Zarejestrowano</p>
-          </Alert>
+          <>
+            <Alert variant="success">
+              <AlertHeading>Succes!</AlertHeading>
+              <p>
+                You have been successfully registered. You can now log in...
+              </p>
+            </Alert>
+          </>
         )}
 
         {status === "serverError" && (
@@ -65,14 +74,14 @@ const Register = () => {
         {status === "clientError" && (
           <Alert variant="danger">
             <AlertHeading>Something went wrong ...</AlertHeading>
-            <p>Wypełnij wszystkie pola</p>
+            <p>Fiil in all fields</p>
           </Alert>
         )}
 
         {status === "loginError" && (
           <Alert variant="warning">
             <AlertHeading>Something went wrong ...</AlertHeading>
-            <p>Login zajęty</p>
+            <p>Login is taken</p>
           </Alert>
         )}
 
@@ -101,7 +110,7 @@ const Register = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Telefon: </Form.Label>
+          <Form.Label>Phone: </Form.Label>
           <Form.Control
             type="tel"
             value={tel}
@@ -118,7 +127,7 @@ const Register = () => {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          Załóż konto
+          REGISTER
         </Button>
       </Form>
     </div>

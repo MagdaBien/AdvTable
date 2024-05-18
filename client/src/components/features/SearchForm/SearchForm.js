@@ -3,31 +3,37 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SearchForm = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
+  const navigate = useNavigate();
 
   const actionHandler = (e) => {
     e.preventDefault();
-    const pathSearch = "/search/" + searchPhrase;
-    console.log("ścieżka: ", pathSearch);
-    redirect(pathSearch);
+    if (searchPhrase) {
+      const pathSearch = "/search/" + searchPhrase;
+      setSearchPhrase("");
+      navigate(pathSearch);
+    }
   };
 
   return (
     <div>
-      <Form onSubmit={actionHandler} className="col-12 col-sm-4 mx-auto">
+      <Form inline="true" onSubmit={actionHandler}>
         <Row>
-          <Col>
+          <Col xs="auto">
             <Form.Control
               type="text"
+              placeholder="Search phrase"
+              className=" mr-sm-2"
               value={searchPhrase}
               onChange={(e) => setSearchPhrase(e.target.value)}
             />
-
-            <Button variant="primary" type="submit">
-              Search
+          </Col>
+          <Col xs="auto">
+            <Button type="submit" variant="outline-primary">
+              SEARCH
             </Button>
           </Col>
         </Row>

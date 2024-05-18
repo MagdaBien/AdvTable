@@ -1,49 +1,58 @@
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllFoundAds,
+  getAllAds,
+  isLoadingAds,
+  isErrorAds,
+} from "../../../redux/adsRedux";
 import AdItem from "../../features/AdItem/AdItem";
 import { Spinner, ListGroup } from "react-bootstrap";
-import { API_URL } from "../../../config";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
 
-const AdSearch = () => {
-  const [status, setStatus] = useState(null);
-  const adsList = [];
+const Ads = () => {
+  const dispatch = useDispatch();
   const { searchPhrase } = useParams();
 
-  const options = {
-    method: "GET",
-  };
+  const adsList = useSelector(getAllAds);
+  //console.log("thf: ", adsList);
 
-  setStatus("loading");
-  fetch(`${API_URL}/ads/search/${searchPhrase}`, options)
-    .then((res) => {
-      if (res.status === 200) {
-        setStatus("success");
-        // zwrot ogłoszen
-      } else if (res.status === 400) {
-        setStatus("clientError");
-      } else {
-        setStatus("serverError");
-      }
-    })
-    .catch((err) => {
-      setStatus("serverError");
-    });
+  useEffect(() => {
+    dispatch(getAllFoundAds(searchPhrase));
+  }, [searchPhrase]);
+
+  const isLoading = useSelector(isLoadingAds);
+  const isError = useSelector(isErrorAds);
+  //console.log(isLoading, isError);
+
+  if (isLoading) {
+    return (
+      <Spinner animation="border" role="status" className="block mx-auto">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    );
+  }
+
+  if (isError) {
+    return <p>Error ... {isError}</p>;
+  }
+
+  if (adsList.message) {
+    return (
+      <>
+        <h1>All ads by phrase: {searchPhrase}</h1> <p>{adsList.message}</p>
+      </>
+    );
+  }
 
   return (
     <ListGroup>
-      <h1>Ads found</h1>
-
-      {status === "loading" && (
-        <Spinner animation="border" role="status" className="block mx-auto">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      )}
-
+      <h1>All ads by phrase: {searchPhrase}</h1>
       {adsList.map((ad) => (
-        <AdItem key={ad.id} {...ad}></AdItem>
+        <AdItem key={ad._id} {...ad}></AdItem>
       ))}
     </ListGroup>
   );
 };
 
-export default AdSearch;
+export default Ads;

@@ -12,8 +12,18 @@ import Register from "./components/features/Register/Register";
 import Login from "./components/features/Login/Login";
 import Logout from "./components/features/Logout/Logout";
 import AdSearch from "./components/pages/AdSearch/AdSearch";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loadLoggedUser } from "./redux/usersRedux";
+import DeleteAd from "./components/features/DeleteAd/DeleteAd";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadLoggedUser());
+  }, []);
+
   return (
     <Container>
       <Header />
@@ -23,6 +33,7 @@ const App = () => {
         <Route path="/ads" element={<Ads />} />
         <Route path="/ad/add" element={<AdAdd />} />
         <Route path="/ad/edit/:id" element={<EditAdForm />} />
+        <Route path="/ad/delete/:id" element={<DeleteAd />} />
         <Route path="/auth/register" element={<Register />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/logout" element={<Logout />} />

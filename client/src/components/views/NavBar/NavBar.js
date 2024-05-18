@@ -5,10 +5,10 @@ import styles from "./NavBar.module.scss";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getUser } from "../../../redux/usersRedux";
-import SearchForm from "../../features/SearchForm/SearchForm";
 
 const NavBar = () => {
   const user = useSelector(getUser);
+  //console.log("user z navBar: ", user);
   return (
     <Navbar
       variant="dark"
@@ -18,31 +18,30 @@ const NavBar = () => {
     >
       <Container>
         <Navbar.Brand>Advertising Table</Navbar.Brand>
-        <Nav>
+        <Nav variant="underline">
           <Nav.Link as={NavLink} to="/">
             Home
           </Nav.Link>
-          <Nav.Link as={NavLink} to="/ad/add">
-            Add ad
-          </Nav.Link>
-          <Nav.Link as={NavLink} to="/ads">
-            All ads
-          </Nav.Link>
-          <Nav.Link as={NavLink} to="/auth/register">
-            Rejestracja
-          </Nav.Link>
-          {user !== null && (
-            <Nav.Link as={NavLink} to="/auth/logout">
-              Logout
-            </Nav.Link>
+          {user.login !== null && (
+            <>
+              <Nav.Link as={NavLink} to="/ad/add">
+                Add ad
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/auth/logout">
+                Logout
+              </Nav.Link>
+            </>
           )}
-          {user === null && (
-            <Nav.Link as={NavLink} to="/auth/login">
-              Login
-            </Nav.Link>
+          {user.login === null && (
+            <>
+              <Nav.Link as={NavLink} to="/auth/register">
+                Register
+              </Nav.Link>{" "}
+              <Nav.Link as={NavLink} to="/auth/login">
+                Login
+              </Nav.Link>
+            </>
           )}
-
-          <SearchForm />
         </Nav>
       </Container>
     </Navbar>

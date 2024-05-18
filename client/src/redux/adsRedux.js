@@ -1,7 +1,6 @@
 import initialState from "./initialState";
 import { API_URL } from "../config";
 import axios from "axios";
-import shortid from "shortid";
 
 //selectors
 export const getAllAds = (state) => state.ads.data;
@@ -16,32 +15,51 @@ const ERROR_REQUEST = createActionName("ERROR_REQUEST");
 const LOAD_ADS = createActionName("LOAD_ADS");
 const ADD_AD = createActionName("ADD_AD");
 const EDIT_AD = createActionName("EDIT_AD");
+const REMOVE_AD = createActionName("REMOVE_AD");
 
 // action creators
 export const startRequest = () => ({ type: START_REQUEST });
-export const errorRequest = (error) => ({ error, type: ERROR_REQUEST });
+export const errorRequest = (payload) => ({ payload, type: ERROR_REQUEST });
 export const loadAds = (payload) => ({ payload, type: LOAD_ADS });
 export const addAd = (payload) => ({ type: ADD_AD, payload });
 export const editAd = (payload) => ({ type: EDIT_AD, payload });
+export const removeAd = (payload) => ({ type: REMOVE_AD, payload });
 
 export const loadAdsRequest = () => {
   return async (dispatch) => {
-    await dispatch(startRequest);
+    dispatch(startRequest);
     //await new Promise((resolve) => setTimeout(resolve, 3000));
     try {
       let res = await axios.get(`${API_URL}/ads`);
-      //await new Promise((resolve) => setTimeout(resolve, 3000));
+      //await new Promise((resolve) => setTimeout(resolve, 2000));
       dispatch(loadAds(res.data));
     } catch (e) {
-      dispatch(errorRequest({ type: "ERROR_REQUEST", error: e.message }));
+      dispatch(errorRequest({ error: e.message }));
+    }
+  };
+};
+
+export const getAllFoundAds = (searchPhrase) => {
+  return async (dispatch) => {
+    dispatch(startRequest);
+    try {
+      let res = await axios.get(`${API_URL}/ads/search/${searchPhrase}`);
+      //console.log("res in redux: ", res);
+      //await new Promise((resolve) => setTimeout(resolve, 2000));
+      if (res.status === 200) {
+        dispatch(loadAds(res.data));
+      }
+    } catch (e) {
+      dispatch(errorRequest({ error: e.message }));
     }
   };
 };
 
 export const addAdRequest = (newAd) => {
+  //console.log("added adv: ", newAd);
   return (dispatch) => {
     const fd = new FormData();
-    fd.append("_id", shortid());
+    fd.append("_id", newAd._id);
     fd.append("title", newAd.title);
     fd.append("adContent", newAd.adContent);
     fd.append("published", newAd.published);
@@ -70,7 +88,7 @@ export const editAdRequest = (chosenAd) => {
     fd.append("adPhoto", chosenAd.adPhoto);
     fd.append("price", chosenAd.price);
     fd.append("location", chosenAd.location);
-    fd.append("user", chosenAd.user);
+    //fd.append("user", chosenAd.user);
 
     const options = {
       method: "PUT",
@@ -78,8 +96,19 @@ export const editAdRequest = (chosenAd) => {
     };
 
     fetch(API_URL + "/ads/" + chosenAd._id, options).then(() =>
-      dispatch(editAd(chosenAd))
+      dispatch(editAd({ ...chosenAd, id: chosenAd }))
     );
+  };
+};
+
+export const removeAdRequest = (id) => {
+  //console.log("hello from delete: ", id);
+  return (dispatch) => {
+    const options = {
+      method: "DELETE",
+    };
+
+    fetch(API_URL + "/ads/" + id, options).then(() => dispatch(removeAd(id)));
   };
 };
 
@@ -88,7 +117,7 @@ const adsReducer = (statePart = initialState.ads, action) => {
     case START_REQUEST:
       return {
         data: statePart.data,
-        pending: "true2",
+        pending: true,
         error: null,
       };
     case LOAD_ADS:
@@ -116,6 +145,12 @@ const adsReducer = (statePart = initialState.ads, action) => {
         ),
         pending: false,
         error: action.payload.error,
+      };
+    case REMOVE_AD:
+      return {
+        data: statePart.data.filter((ad) => ad.id !== action.payload),
+        pending: false,
+        error: false,
       };
     default:
       return statePart;

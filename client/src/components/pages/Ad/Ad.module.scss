@@ -47,8 +47,8 @@ a.butLinkGreen {
   padding: 15px 0 40px 0;
 }
 div.photo {
-  width: 200px;
-  height: 160px;
+  width: 100%;
+  height: auto;
 }
 img.photo {
   width: 100%;
@@ -56,7 +56,7 @@ img.photo {
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid #ccc;
-  
 }
 
+.moreButton { margin: 10px 0}
 .editButton { margin: 20px 0}
