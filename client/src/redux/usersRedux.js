@@ -58,7 +58,8 @@ export const loadLoggedUser = () => {
       };
 
       fetch(`${API_URL}/user`, options).then((res) => {
-        dispatch(loadUser(res.data));
+        const user = res.json();
+        dispatch(loadUser(user));
       });
     } catch (e) {
       dispatch(errorRequest({ error: e.message }));
