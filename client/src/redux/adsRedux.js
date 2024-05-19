@@ -56,7 +56,7 @@ export const getAllFoundAds = (searchPhrase) => {
 };
 
 export const addAdRequest = (newAd) => {
-  //console.log("added adv: ", newAd);
+  console.log("added adv: ", newAd);
   return (dispatch) => {
     const fd = new FormData();
     fd.append("_id", newAd._id);
@@ -93,6 +93,7 @@ export const editAdRequest = (chosenAd) => {
 
     const options = {
       method: "PUT",
+      credentials: "include",
       body: fd,
     };
 
@@ -106,7 +107,7 @@ export const removeAdRequest = (id) => {
   //console.log("hello from delete: ", id);
   return (dispatch) => {
     const options = {
-      method: "DELETE",
+      credentials: "include",
     };
 
     fetch(API_URL + "/ads/" + id, options).then(() => dispatch(removeAd(id)));

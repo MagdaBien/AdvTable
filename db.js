@@ -11,7 +11,7 @@ const connectToDB = () => {
     dbUri = "mongodb://localhost:27017/adsDB";
   }
 
-  console.log("dbUri: ", dbUri, NODE_ENV);
+  //console.log("dbUri: ", dbUri, NODE_ENV);
   mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
   const db = mongoose.connection;
 
