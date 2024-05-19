@@ -24,6 +24,7 @@ const Register = () => {
 
     const options = {
       method: "POST",
+      credentials: "include",
       body: fd,
     };
 

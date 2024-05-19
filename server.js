@@ -8,7 +8,6 @@ const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
 const corsOptions = {
   origin: "*",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
 
