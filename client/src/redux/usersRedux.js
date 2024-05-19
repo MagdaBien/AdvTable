@@ -52,8 +52,14 @@ export const errorRequest = (payload) => ({ payload, type: ERROR_REQUEST });
 export const loadLoggedUser = () => {
   return async (dispatch) => {
     try {
-      let res = await axios.get(`${API_URL}/user`);
-      dispatch(loadUser(res.data));
+      const options = {
+        method: "GET",
+        credentials: "include",
+      };
+
+      fetch(`${API_URL}/user`, options).then((res) => {
+        dispatch(loadUser(res.data));
+      });
     } catch (e) {
       dispatch(errorRequest({ error: e.message }));
     }

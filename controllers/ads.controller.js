@@ -28,7 +28,7 @@ exports.getById = async (req, res) => {
 exports.addOne = async (req, res) => {
   const { title, adContent, published, price, location, user } = req.body;
   const fileType = req.file ? await getImageFileType(req.file) : "unknown";
-  /*console.log(
+  console.log(
     "dane do dodania: ",
     title,
     adContent,
@@ -36,7 +36,7 @@ exports.addOne = async (req, res) => {
     price,
     location,
     user
-  );*/
+  );
   try {
     if (
       req.session.user &&
