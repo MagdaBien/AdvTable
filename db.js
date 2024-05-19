@@ -6,12 +6,12 @@ const connectToDB = () => {
   let dbUri = "";
 
   if (NODE_ENV === "production") {
-    dbUri =
-      "mongodb+srv://magbie1978:${DB_PASS}@cluster0.ut7tgmr.mongodb.net/adsDB?retryWrites=true&w=majority&appName=Cluster0";
+    dbUri = `mongodb+srv://magbie1978:${DB_PASS}@cluster0.ut7tgmr.mongodb.net/adsDB?retryWrites=true&w=majority&appName=Cluster0`;
   } else {
     dbUri = "mongodb://localhost:27017/adsDB";
   }
 
+  console.log("dbUri: ", dbUri);
   mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
   const db = mongoose.connection;
 
