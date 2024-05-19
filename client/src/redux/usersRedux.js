@@ -16,7 +16,11 @@ const ERROR_REQUEST = createActionName("ERROR_REQUEST");
 const usersReducer = (statePart = initialState.user, action) => {
   switch (action.type) {
     case LOG_IN:
-      return action.payload;
+      return {
+        login: action.payload.login,
+        id: action.payload.id,
+        avatar: action.payload.avatar,
+      };
     case LOG_OUT:
       return {
         login: null,
