@@ -6,6 +6,11 @@ const connectToDB = require("./db");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
+const corsOptions = {
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
 
 // start express server
 const app = express();
@@ -17,7 +22,7 @@ const server = app.listen(process.env.PORT || 8000, () => {
 connectToDB();
 
 // add middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(

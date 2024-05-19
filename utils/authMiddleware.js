@@ -21,7 +21,7 @@ const authMiddleware = async (req, res, next) => {
 
       next();
     } catch (err) {
-      return res.status(401).send({ message: "You are not authorized" });
+      return res.status(401).send({ message: "You are not authorized local" });
     }
   } else {
     if (req.session.user) {
