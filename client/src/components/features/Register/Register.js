@@ -8,6 +8,7 @@ const Register = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [tel, setTel] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [status, setStatus] = useState(null); // null, loading, success, serverError, clientError, loginError
   const navigate = useNavigate();
 
@@ -23,7 +24,6 @@ const Register = () => {
 
     const options = {
       method: "POST",
-      credentials: "include",
       body: fd,
     };
 
