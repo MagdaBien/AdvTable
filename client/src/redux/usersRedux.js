@@ -40,7 +40,11 @@ const usersReducer = (statePart = initialState.user, action) => {
         avatar: null,
       };
     default:
-      return statePart;
+      return {
+        login: null,
+        id: null,
+        avatar: null,
+      };
   }
 };
 
