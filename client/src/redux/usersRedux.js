@@ -40,11 +40,7 @@ const usersReducer = (statePart = initialState.user, action) => {
         avatar: null,
       };
     default:
-      return {
-        login: null,
-        id: null,
-        avatar: null,
-      };
+      return statePart;
   }
 };
 
@@ -57,7 +53,11 @@ export const loadLoggedUser = () => {
   return async (dispatch) => {
     try {
       let res = await axios.get(`${API_URL}/user`, { withCredentials: true });
-      dispatch(loadUser(res.data));
+      if (res.data) {
+        dispatch(loadUser(res.data));
+      } else {
+        dispatch(loadUser({ login: null, id: null, avatar: null }));
+      }
     } catch (e) {
       dispatch(errorRequest({ error: e.message }));
     }
