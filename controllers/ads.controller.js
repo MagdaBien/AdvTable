@@ -9,6 +9,7 @@ const unlinkAsync = promisify(fs.unlink);
 exports.getAll = async (req, res) => {
   try {
     res.json(await Ad.find().populate("user"));
+    //console.log("hello from getAll: ", res.json);
   } catch (err) {
     res.status(500).json({ message: err });
   }
@@ -27,7 +28,7 @@ exports.getById = async (req, res) => {
 exports.addOne = async (req, res) => {
   const { title, adContent, published, price, location, user } = req.body;
   const fileType = req.file ? await getImageFileType(req.file) : "unknown";
-  /*console.log(
+  console.log(
     "dane do dodania: ",
     title,
     adContent,
@@ -35,7 +36,7 @@ exports.addOne = async (req, res) => {
     price,
     location,
     user
-  );*/
+  );
   try {
     if (
       req.session.user &&
@@ -80,7 +81,7 @@ exports.addOne = async (req, res) => {
 
 exports.updateOne = async (req, res) => {
   const { title, adContent, price, location } = req.body;
-  console.log(title, adContent, price, location, req.file);
+  //console.log(title, adContent, price, location, req.file);
 
   try {
     const adToUpdate = await Ad.findOne({ _id: req.params.id });
@@ -108,7 +109,7 @@ exports.updateOne = async (req, res) => {
           if (["image/png", "image/jpeg", "image/gif"].includes(fileType)) {
             const oldPhotoToDelete =
               uploadFolderPath + "/" + adToUpdate.adPhoto;
-            console.log("oldFile ", oldPhotoToDelete);
+            //console.log("oldFile ", oldPhotoToDelete);
             await unlinkAsync(oldPhotoToDelete);
             adToUpdate.adPhoto = req.file.filename;
           }
@@ -125,7 +126,7 @@ exports.updateOne = async (req, res) => {
 };
 
 exports.deleteOne = async (req, res) => {
-  console.log("kasuje ad o id: ", req.params.id);
+  console.log("kasuje ad o id: ", req.params.id, req.session.user);
   try {
     const ad = await Ad.findOneAndDelete({ _id: req.params.id });
     if (req.session.user.id !== ad.user) {
@@ -135,7 +136,7 @@ exports.deleteOne = async (req, res) => {
       const photoToDelete = uploadFolderPath + "/" + ad.adPhoto;
       await unlinkAsync(photoToDelete);
       res.json(ad);
-    } else res.status(404).json({ message: "Not found..." });
+    } else res.status(404).json({ message: "Not found add to delete..." });
   } catch (err) {
     res.status(500).json({ message: err });
   }

@@ -6,7 +6,7 @@ const initialState = {
   },
   user: {
     login: null,
-    _id: null,
+    id: null,
     avatar: null,
   },
 };

@@ -4,6 +4,6 @@ const authMiddleware = require("../utils/authMiddleware");
 
 const UserController = require("../controllers/users.controller");
 
-router.get("/user", authMiddleware, UserController.getLoggedUser);
+router.get("/user", UserController.getLoggedUser);
 
 module.exports = router;

@@ -42,7 +42,7 @@ const Ad = () => {
   }
 
   const adUser = { ...ad.user };
-  //console.log(adUser);
+  console.log("user od ogłoszenia: ", loggedUser.id, adUser);
 
   let showEdit = false;
   if (loggedUser.id === adUser._id) {

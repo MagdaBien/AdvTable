@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const getImageFileType = require("../utils/getImageFileType");
-const Session = require("../models/Session.model");
+const Session = require("../models/session.model");
 
 const fs = require("fs");
 const { promisify } = require("util");
@@ -9,7 +9,7 @@ const unlinkAsync = promisify(fs.unlink);
 
 exports.registerUser = async (req, res) => {
   const { login, password, tel } = req.body;
-  //console.log("dane do rejestracji: ", login, password, tel);
+  console.log("dane do rejestracji: ", login, password, tel);
   const fileType = req.file ? await getImageFileType(req.file) : "unknown";
 
   try {
@@ -58,19 +58,21 @@ exports.loginUser = async (req, res) => {
       password &&
       typeof password === "string"
     ) {
-      const user = await User.findOne({ login });
-      console.log("user: ", user);
-      if (!user) {
+      const foundUser = await User.findOne({ login });
+      //console.log("user: ", user);
+      if (!foundUser) {
         return res
           .status(400)
           .json({ message: "Login or password incorrect..." });
       } else {
-        if (bcrypt.compareSync(password, user.password)) {
+        if (bcrypt.compareSync(password, foundUser.password)) {
+          //console.log("foundUser: ", foundUser);
           req.session.user = {
-            login: user.login,
-            id: user.id,
-            avatar: user.avatar,
+            login: foundUser.login,
+            id: foundUser._id.toString(),
+            avatar: foundUser.avatar,
           };
+          console.log("req.session.user: ", req.session.user);
           return res.status(200).json(req.session.user);
         } else {
           return res

@@ -22,6 +22,8 @@ const AddAdForm = () => {
     location: "",
   };
 
+  console.log("user id", loggedUser.id);
+
   const handleSubmit = (form) => {
     dispatch(
       addAdRequest({

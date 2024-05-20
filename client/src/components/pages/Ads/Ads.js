@@ -18,7 +18,7 @@ const Ads = () => {
 
   useEffect(() => {
     dispatch(loadAdsRequest());
-  });
+  }, []);
 
   const isLoading = useSelector(isLoadingAds);
   const isError = useSelector(isErrorAds);

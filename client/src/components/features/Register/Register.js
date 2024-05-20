@@ -14,7 +14,7 @@ const Register = () => {
 
   const actionHandler = (e) => {
     e.preventDefault();
-    //console.log(login, password, tel, avatar);
+    console.log(login, password, tel, avatar);
 
     const fd = new FormData();
     fd.append("login", login);

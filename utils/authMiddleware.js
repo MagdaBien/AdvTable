@@ -1,4 +1,5 @@
-const Session = require("../models/Session.model");
+const Session = require("../models/session.model");
+
 const authMiddleware = async (req, res, next) => {
   if (process.env.NODE_ENV !== "production") {
     try {
@@ -8,7 +9,9 @@ const authMiddleware = async (req, res, next) => {
       // if session is not found
       // return 401 status and message
       if (!sessionRecord)
-        return res.status(401).send({ message: "You are not authorized" });
+        return res
+          .status(401)
+          .send({ message: "You are not authorized session" });
 
       // if session is found, parse it and set user in req.session
       const sessionData = JSON.parse(sessionRecord.session);
@@ -20,13 +23,16 @@ const authMiddleware = async (req, res, next) => {
 
       next();
     } catch (err) {
-      return res.status(401).send({ message: "You are not authorized" });
+      return res.status(401).send({ message: "You are not authorized local" });
     }
   } else {
+    //console.log("hello from middleware: ", req.session.user);
     if (req.session.user) {
       next();
     } else {
-      res.status(401).send({ message: "You are not authorized" });
+      res.status(401).send({
+        message: "You are not authorized by middleware",
+      });
     }
   }
 };

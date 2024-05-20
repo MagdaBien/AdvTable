@@ -9,9 +9,6 @@ const mongoose = require("mongoose");
 
 // start express server
 const app = express();
-const server = app.listen(process.env.PORT || 8000, () => {
-  console.log("Server is running...");
-});
 
 // connect to DB
 connectToDB();
@@ -22,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
-    secret: process.env.secret,
+    secret: process.env.SECRET,
     cookie: {
       secure: process.env.NODE_ENV == "production",
     },
@@ -36,7 +33,7 @@ app.use(
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "/client/build")));
 
-// add photo routes
+// add  routes
 const adsRoutes = require("./routes/ads.routes");
 const usersRoutes = require("./routes/users.routes");
 const authRoutes = require("./routes/auth.routes");
@@ -45,7 +42,11 @@ app.use("/api", usersRoutes);
 app.use("/api/auth", authRoutes);
 
 app.get("*", (req, res) => {
-  res.send("Server is running...");
+  res.sendFile(path.join(__dirname, "/client/build/index.html"));
+});
+
+const server = app.listen(process.env.PORT || 8000, () => {
+  console.log("Server is running...");
 });
 
 app.use((req, res) => {

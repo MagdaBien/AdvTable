@@ -18,6 +18,7 @@ import { loadLoggedUser } from "./redux/usersRedux";
 import DeleteAd from "./components/features/DeleteAd/DeleteAd";
 
 const App = () => {
+  //console.log("zmienne: ", req.session.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
