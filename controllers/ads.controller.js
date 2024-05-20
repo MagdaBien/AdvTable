@@ -126,7 +126,7 @@ exports.updateOne = async (req, res) => {
 };
 
 exports.deleteOne = async (req, res) => {
-  //console.log("kasuje ad o id: ", req.params.id);
+  console.log("kasuje ad o id: ", req.params.id, req.session.user);
   try {
     const ad = await Ad.findOneAndDelete({ _id: req.params.id });
     if (req.session.user.id !== ad.user) {
