@@ -1,6 +1,6 @@
 import initialState from "./initialState";
 import { API_URL } from "../config";
-import axios from "axios";
+//import axios from "axios";
 
 //selectors
 export const getUser = (state) => state.user;

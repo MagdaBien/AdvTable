@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
-    secret: process.env.SECRET,
+    secret: process.env["SECRET"],
     cookie: {
       secure: process.env.NODE_ENV == "production",
     },

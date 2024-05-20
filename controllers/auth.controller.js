@@ -72,7 +72,7 @@ exports.loginUser = async (req, res) => {
             id: foundUser._id.toString(),
             avatar: foundUser.avatar,
           };
-          console.log("req.session.user: ", req.session.user);
+          // console.log("req.session.user: ", req.session.user);
           return res.status(200).json(req.session.user);
         } else {
           return res

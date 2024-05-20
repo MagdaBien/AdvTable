@@ -80,7 +80,7 @@ export const addAdRequest = (newAd) => {
 
 export const editAdRequest = (chosenAd) => {
   return (dispatch) => {
-    console.log("chosenAd: ", chosenAd);
+    //console.log("chosenAd: ", chosenAd);
     const fd = new FormData();
     //fd.append("_id", chosenAd._id);
     fd.append("title", chosenAd.title);
