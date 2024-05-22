@@ -12,10 +12,7 @@ const app = express();
 
 // connect to DB
 connectToDB();
-const corsOptions = {
-  origin:
-    "https://f1289947-7722-49d7-937f-4ea697bda01d-00-1fttp15mfftfw.riker.replit.dev/",
-};
+const corsOptions = { credentials: true, origin: true };
 
 // add middleware
 app.use(cors(corsOptions));
@@ -25,7 +22,7 @@ app.use(
   session({
     secret: process.env["SECRET"],
     cookie: {
-      secure: process.env.NODE_ENV == "production",
+      secure: (process.env.NODE_ENV = "production"),
     },
     store: MongoStore.create(mongoose.connection),
     resave: false,

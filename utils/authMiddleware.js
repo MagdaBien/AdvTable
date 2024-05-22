@@ -1,6 +1,11 @@
 const Session = require("../models/session.model");
 
 const authMiddleware = async (req, res, next) => {
+  console.log(
+    "hello from middleware: ",
+    process.env.NODE_ENV,
+    req.session.user
+  );
   if (process.env.NODE_ENV !== "production") {
     try {
       // find last session record in db
@@ -26,12 +31,11 @@ const authMiddleware = async (req, res, next) => {
       return res.status(401).send({ message: "You are not authorized local" });
     }
   } else {
-    //console.log("hello from middleware: ", req.session.user);
     if (req.session.user) {
       next();
     } else {
       res.status(401).send({
-        message: "You are not authorized by middleware",
+        message: "You are not authorized by middleware" + req.session.user,
       });
     }
   }

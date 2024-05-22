@@ -29,8 +29,8 @@ const EditAdForm = () => {
     user: loggedUserId,
   };
 
-  const handleSubmit = (form) => {
-    dispatch(editAdRequest({ ...form, _id: id }));
+  const handleSubmit = async (form) => {
+    await dispatch(editAdRequest({ ...form, _id: id }));
     navigate("/");
   };
 

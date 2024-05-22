@@ -8,7 +8,9 @@ const unlinkAsync = promisify(fs.unlink);
 
 exports.getAll = async (req, res) => {
   try {
-    res.json(await Ad.find().populate("user"));
+    const ads = await Ad.find().populate("user");
+    if (!ads) res.status(404).json({ message: "Not found" });
+    else res.status(200).json(ads);
     //console.log("hello from getAll: ", res.json);
   } catch (err) {
     res.status(500).json({ message: err });
@@ -67,7 +69,7 @@ exports.addOne = async (req, res) => {
       });
       //console.log("newAd ", newAd);
       await newAd.save();
-      res.json({ message: "OK" });
+      res.status(200).json(newAd);
     } else {
       if (req.file.path) {
         await unlinkAsync(req.file.path);
@@ -126,16 +128,16 @@ exports.updateOne = async (req, res) => {
 };
 
 exports.deleteOne = async (req, res) => {
-  console.log("kasuje ad o id: ", req.params.id, req.session.user);
+  //console.log("kasuje ad o id: ", req.params.id, req.session.user);
   try {
-    const ad = await Ad.findOneAndDelete({ _id: req.params.id });
-    if (req.session.user.id !== ad.user) {
+    const adToDelete = await Ad.findOneAndDelete({ _id: req.params.id });
+    if (req.session.user.id !== adToDelete.user) {
       return res.status(404).json({ message: "Not your ad..." });
     }
-    if (ad) {
-      const photoToDelete = uploadFolderPath + "/" + ad.adPhoto;
+    if (adToDelete) {
+      const photoToDelete = (await uploadFolderPath) + "/" + adToDelete.adPhoto;
       await unlinkAsync(photoToDelete);
-      res.json(ad);
+      res.status(200).json(adToDelete);
     } else res.status(404).json({ message: "Not found add to delete..." });
   } catch (err) {
     res.status(500).json({ message: err });

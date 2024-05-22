@@ -4,7 +4,6 @@ import {
   getAllAds,
   isLoadingAds,
   isErrorAds,
-  startRequest,
 } from "../../../redux/adsRedux";
 import AdItem from "../../features/AdItem/AdItem";
 import { Spinner, ListGroup } from "react-bootstrap";
@@ -23,7 +22,6 @@ const Ads = () => {
   const isLoading = useSelector(isLoadingAds);
   const isError = useSelector(isErrorAds);
   //console.log(isLoading, isError);
-
   const adsList = useSelector(getAllAds);
 
   if (isLoading || adsList.message) {

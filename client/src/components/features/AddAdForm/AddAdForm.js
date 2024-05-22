@@ -22,10 +22,10 @@ const AddAdForm = () => {
     location: "",
   };
 
-  console.log("user id", loggedUser.id);
+  //console.log("user id", loggedUser.id);
 
-  const handleSubmit = (form) => {
-    dispatch(
+  const handleSubmit = async (form) => {
+    await dispatch(
       addAdRequest({
         ...form,
         user: loggedUser.id,
