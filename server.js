@@ -47,7 +47,7 @@ app.get("*", (req, res) => {
 });
 
 const server = app.listen(process.env.PORT || 8000, () => {
-  console.log("Server is running...");
+  console.log("Server is running in mode..." + process.env.NODE_ENV);
 });
 
 app.use((req, res) => {
