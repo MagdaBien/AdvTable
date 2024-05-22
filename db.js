@@ -8,8 +8,8 @@ const connectToDB = () => {
   if (NODE_ENV === "production") {
     dbUri = `mongodb+srv://magbie1978:${DB_PASS}@cluster0.ut7tgmr.mongodb.net/adsDB?retryWrites=true&w=majority&appName=Cluster0`;
   } else {
-    dbUri = "mongodb://localhost:27017/adsDB";
-    //dbUri = `mongodb+srv://magbie1978:${DB_PASS}@cluster0.ut7tgmr.mongodb.net/adsDB?retryWrites=true&w=majority&appName=Cluster0`;
+    //dbUri = "mongodb://localhost:27017/adsDB";
+    dbUri = `mongodb+srv://magbie1978:${DB_PASS}@cluster0.ut7tgmr.mongodb.net/adsDB?retryWrites=true&w=majority&appName=Cluster0`;
   }
 
   //console.log("dbUri: ", dbUri, NODE_ENV);
