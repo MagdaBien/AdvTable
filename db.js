@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const connectToDB = () => {
-  const NODE_ENV = process.env["NODE_ENV"];
-  const DB_PASS = process.env["DB_PASS"];
+  const NODE_ENV = process.env.NODE_ENV;
+  const DB_PASS = process.env.DB_PASS;
   let dbUri = "";
 
   if (NODE_ENV === "production") {
