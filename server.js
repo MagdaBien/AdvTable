@@ -2,24 +2,16 @@ require("dotenv").config({ path: ".env" });
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const connectToDB = require("./db");
+const { connectToDB, dbUri } = require("./db");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-//const mongoose = require("mongoose");
 
 // start express server
 const app = express();
 
 // connect to DB
-connectToDB();
-dbUri = `mongodb+srv://magbie1978:${process.env.DB_PASS}@cluster0.ut7tgmr.mongodb.net/adsDB?retryWrites=true&w=majority&appName=Cluster0`;
+connectToDB(dbUri);
 
-/*
-const corsOptions = {
-  credentials: true,
-  origin: true,
-};
-*/
 // add middleware
 app.use(cors());
 app.use(express.json());

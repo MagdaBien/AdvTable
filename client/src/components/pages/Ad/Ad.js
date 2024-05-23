@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import { useEffect } from "react";
 import {
-  loadAdsRequest,
+  loadAdRequest,
   isLoadingAds,
   isErrorAds,
 } from "../../../redux/adsRedux";
@@ -23,7 +23,8 @@ const Ad = () => {
   const loggedUser = useSelector(getUser); // get extended data with user date
 
   useEffect(() => {
-    dispatch(loadAdsRequest());
+    //dispatch(loadAdsRequest());
+    dispatch(loadAdRequest(id));
   }, []);
 
   const isLoading = useSelector(isLoadingAds);
@@ -42,7 +43,7 @@ const Ad = () => {
   }
 
   const adUser = { ...ad.user };
-  console.log("user od ogłoszenia: ", loggedUser.id, adUser);
+  //console.log("user od ogłoszenia: ", loggedUser.id, adUser);
 
   let showEdit = false;
   if (loggedUser.id === adUser._id) {

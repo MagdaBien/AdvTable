@@ -41,6 +41,20 @@ export const loadAdsRequest = () => {
   };
 };
 
+export const loadAdRequest = (id) => {
+  return async (dispatch) => {
+    dispatch(startRequest);
+    try {
+      let res = await axios.get(`${API_URL}/ads/${id}`);
+      if (res.status === 200) {
+        dispatch(loadAds([res.data]));
+      }
+    } catch (e) {
+      dispatch(errorRequest({ error: e.message }));
+    }
+  };
+};
+
 export const getAllFoundAds = (searchPhrase) => {
   return async (dispatch) => {
     dispatch(startRequest);
@@ -78,7 +92,7 @@ export const addAdRequest = (newAd) => {
 
     await dispatch(startRequest);
     await fetch(API_URL + "/ads", options).then(async () =>
-      dispatch(await addAd(newAd))
+      dispatch(addAd(newAd))
     );
   };
 };
@@ -104,28 +118,10 @@ export const editAdRequest = (chosenAd) => {
 
     await dispatch(startRequest);
     await fetch(API_URL + "/ads/" + chosenAd._id, options).then(async () =>
-      dispatch(await editAd({ ...chosenAd, _id: chosenAd._id }))
+      dispatch(editAd({ ...chosenAd, _id: chosenAd._id }))
     );
   };
 };
-/*
-export const removeAdRequest = (id) => {
-  return async (dispatch) => {
-    await dispatch(startRequest);
-    console.log("hello from delete: ", dispatch(isLoadingAds));
-
-    const options = {
-      method: "DELETE",
-      credentials: "include",
-    };
-
-    await dispatch(startRequest);
-    await fetch(API_URL + "/ads/" + id, options).then(async () =>
-      dispatch(await removeAd(id))
-    );
-  };
-};
-*/
 
 export const removeAdRequest = (id) => {
   return async (dispatch) => {
@@ -138,7 +134,7 @@ export const removeAdRequest = (id) => {
 
       let res = await fetch(API_URL + "/ads/" + id, options);
       if (res.status === 200) {
-        dispatch(await removeAd(id));
+        dispatch(removeAd(id));
       }
     } catch (e) {
       dispatch(errorRequest({ error: e.message }));
