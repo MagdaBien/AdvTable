@@ -5,30 +5,32 @@ const path = require("path");
 const connectToDB = require("./db");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-const mongoose = require("mongoose");
+//const mongoose = require("mongoose");
 
 // start express server
 const app = express();
 
 // connect to DB
 connectToDB();
+dbUri = `mongodb+srv://magbie1978:${process.env.DB_PASS}@cluster0.ut7tgmr.mongodb.net/adsDB?retryWrites=true&w=majority&appName=Cluster0`;
+
+/*
 const corsOptions = {
   credentials: true,
-  origin:
-    "https://f1289947-7722-49d7-937f-4ea697bda01d-00-1fttp15mfftfw.riker.replit.dev:8000",
+  origin: true,
 };
-
+*/
 // add middleware
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: process.env.SECRET,
-    cookie: {
-      secure: process.env.NODE_ENV == "production",
-    },
-    store: MongoStore.create(mongoose.connection),
+    store: MongoStore.create({
+      mongoUrl: dbUri,
+      autoRemove: "native", // Default
+    }),
     resave: false,
     saveUninitialized: false,
   })
