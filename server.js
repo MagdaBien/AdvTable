@@ -12,7 +12,11 @@ const app = express();
 
 // connect to DB
 connectToDB();
-const corsOptions = { credentials: true, origin: true };
+const corsOptions = {
+  credentials: true,
+  origin:
+    "https://f1289947-7722-49d7-937f-4ea697bda01d-00-1fttp15mfftfw.riker.replit.dev:8000",
+};
 
 // add middleware
 app.use(cors(corsOptions));
